@@ -24,5 +24,17 @@ struct CliArgs {
 }
 
 fn main() {
-    let _args = CliArgs::parse();
+    let args = CliArgs::parse();
+
+    let result = match args.subcmd {
+        SubCommand::Search(args) => cmd::search::handler(args),
+    };
+
+    match result {
+        Ok(_) => std::process::exit(0),
+        Err(err) => {
+            eprintln!("Error: {}", err);
+            std::process::exit(1)
+        }
+    }
 }
