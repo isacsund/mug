@@ -6,8 +6,11 @@ use clap::{
 };
 // }}}
 
+mod cmd;
+
 #[derive(Clap)]
 enum SubCommand {
+    Search(cmd::search::CliArgs),
 }
 
 #[derive(Clap)]
