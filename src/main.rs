@@ -23,11 +23,12 @@ struct CliArgs {
     subcmd: SubCommand,
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let args = CliArgs::parse();
 
     let result = match args.subcmd {
-        SubCommand::Search(args) => cmd::search::handler(args),
+        SubCommand::Search(args) => cmd::search::handler(args).await,
     };
 
     match result {

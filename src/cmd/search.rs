@@ -7,6 +7,6 @@ pub struct CliArgs {
     package: String,
 }
 
-pub fn handler(args: CliArgs) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn handler(args: CliArgs) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
