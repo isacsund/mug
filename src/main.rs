@@ -10,6 +10,7 @@ mod cmd;
 
 #[derive(Clap)]
 enum SubCommand {
+    Info(cmd::info::CliArgs),
     Search(cmd::search::CliArgs),
 }
 
@@ -28,6 +29,7 @@ async fn main() {
     let args = CliArgs::parse();
 
     let result = match args.subcmd {
+        SubCommand::Info(args) => cmd::info::handler(args).await,
         SubCommand::Search(args) => cmd::search::handler(args).await,
     };
 
