@@ -1,0 +1,5 @@
+version = "Two"
+# These features requires Rust nightly
+imports_layout = "Vertical"
+imports_granularity = "Module"
+group_imports = "StdExternalCrate"
