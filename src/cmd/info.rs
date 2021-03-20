@@ -1,6 +1,9 @@
 // 3rd party imports {{{
 use clap::Clap;
-use raur::Raur;
+// }}}
+
+// Own imports {{{
+use crate::aur;
 // }}}
 
 // Pretty print lists
@@ -19,11 +22,11 @@ pub struct CliArgs {
 }
 
 pub async fn handler(args: CliArgs) -> Result<(), Box<dyn std::error::Error>> {
-    let raur = raur::Handle::new();
+    let aur = aur::Handle::new();
 
     // TODO: check if all packages were found
     // raur.info doesn't return any errors if the package isn't found
-    let packages = raur.info(&args.packages).await?;
+    let packages = aur.info(&args.packages).await?;
 
     for package in packages {
         println!("Repository: aur");
