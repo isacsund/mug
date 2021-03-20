@@ -1,8 +1,8 @@
 // 3rd party imports {{{
 use clap::{
-    Clap, 
     crate_authors,
     crate_version,
+    Clap,
 };
 // }}}
 
