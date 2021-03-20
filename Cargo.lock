@@ -3,6 +3,22 @@
 version = 3
 
 [[package]]
+name = "alpm"
+version = "1.1.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "393f4db567eb8e341b765f72e8ea955881b617c2fba38590d67671959a8ab5e3"
+dependencies = [
+ "alpm-sys",
+ "bitflags",
+]
+
+[[package]]
+name = "alpm-sys"
+version = "1.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ce0e5a21bca8d7aaf0d2eca91f02e0c4841b6f9fd3f64bdf68169e381a91c22"
+
+[[package]]
 name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -415,6 +431,7 @@ dependencies = [
 name = "mug"
 version = "0.1.0"
 dependencies = [
+ "alpm",
  "clap",
  "reqwest",
  "serde",

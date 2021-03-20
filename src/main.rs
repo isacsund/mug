@@ -13,6 +13,7 @@ mod error;
 #[derive(Clap)]
 enum SubCommand {
     Info(cmd::info::CliArgs),
+    List(cmd::list::CliArgs),
     Search(cmd::search::CliArgs),
 }
 
@@ -32,6 +33,7 @@ async fn main() {
 
     let result = match args.subcmd {
         SubCommand::Info(args) => cmd::info::handler(args).await,
+        SubCommand::List(args) => cmd::list::handler(args).await,
         SubCommand::Search(args) => cmd::search::handler(args).await,
     };
 
