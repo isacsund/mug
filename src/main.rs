@@ -6,6 +6,7 @@ use clap::{
 };
 // }}}
 
+mod aur;
 mod cmd;
 
 #[derive(Clap)]
