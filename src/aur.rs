@@ -138,4 +138,33 @@ impl Handle {
             Ok(response.results)
         }
     }
+
+    /// Performs an AUR info request.
+    pub async fn info<S>(&self, packages: &[S]) -> Result<Vec<Package>>
+    where
+        S: AsRef<str> + Send + Sync,
+    {
+        let mut params = packages
+            .iter()
+            .map(|name| ("arg[]", name.as_ref()))
+            .collect::<Vec<_>>();
+        params.extend(&[("v", "5"), ("type", "info")]);
+
+        self.request(&params).await
+    }
+
+    /// Performs an AUR search request.
+    pub async fn search<S>(&self, query: S) -> Result<Vec<Package>>
+    where
+        S: AsRef<str> + Send + Sync,
+    {
+        let params = &[
+            ("v", "5"),
+            ("type", "search"),
+            ("by", "name-desc"),
+            ("arg", query.as_ref()),
+        ];
+
+        self.request(params).await
+    }
 }
