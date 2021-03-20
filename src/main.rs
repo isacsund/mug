@@ -8,6 +8,7 @@ use clap::{
 
 mod aur;
 mod cmd;
+mod error;
 
 #[derive(Clap)]
 enum SubCommand {
