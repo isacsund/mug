@@ -429,7 +429,11 @@ dependencies = [
  "clap",
  "raur",
  "reqwest",
+ "serde",
+ "serde_derive",
+ "serde_json",
  "tokio",
+ "url",
 ]
 
 [[package]]

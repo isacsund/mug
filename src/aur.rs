@@ -1,5 +1,14 @@
 // 3rd party imports {{{
-use reqwest::Client;
+use reqwest::{
+    Client,
+    Url,
+};
+use serde_derive::Deserialize;
+
+// }}}
+
+// Own imports {{{
+use crate::error::Error;
 // }}}
 
 /// The default URL used for the AUR.
@@ -80,6 +89,17 @@ pub struct Package {
 }
 // }}}
 
+#[derive(Deserialize)]
+struct Response {
+    #[serde(rename = "type")]
+    response_type: String,
+    error: Option<String>,
+    results: Vec<Package>,
+}
+
+/// Result type for this crate
+type Result<T> = std::result::Result<T, Error>;
+
 /// A handle for making AUR requests.
 #[derive(Clone, Debug)]
 pub struct Handle {
@@ -97,6 +117,25 @@ impl Handle {
         Handle {
             client: Client::new(),
             url,
+        }
+    }
+
+    /// A helper function for making a request with given parameters.
+    async fn request(&self, params: &[(&str, &str)]) -> Result<Vec<Package>> {
+        let url = self.url.join("rpc")?;
+        let url = Url::parse_with_params(url.as_str(), params)?;
+
+        let response = self.client.get(url).send().await?;
+        let response: Response = response.json().await?;
+
+        if response.response_type == "error" {
+            Err(Error::Aur(
+                response
+                    .error
+                    .unwrap_or_else(|| "No error message provided".to_string()),
+            ))
+        } else {
+            Ok(response.results)
         }
     }
 }
