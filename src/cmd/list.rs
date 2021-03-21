@@ -1,8 +1,3 @@
-// std imports {{{
-use std::io::Write;
-
-// }}}
-
 // 3rd party imports {{{
 use clap::Clap;
 
