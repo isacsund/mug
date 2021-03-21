@@ -4,6 +4,7 @@ use clap::Clap;
 
 // Own imports {{{
 use crate::aur;
+use crate::error::Error;
 // }}}
 
 // Pretty print lists
@@ -21,7 +22,7 @@ pub struct CliArgs {
     packages: Vec<String>,
 }
 
-pub async fn handler(args: CliArgs) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn handler(args: CliArgs) -> Result<(), Error> {
     let aur = aur::Handle::new();
 
     // TODO: check if all packages were found

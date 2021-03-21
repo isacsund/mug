@@ -4,6 +4,7 @@ use clap::Clap;
 
 // Own imports {{{
 use crate::aur;
+use crate::error::Error;
 // }}}
 
 #[derive(Clap)]
@@ -11,7 +12,7 @@ pub struct CliArgs {
     package: String,
 }
 
-pub async fn handler(args: CliArgs) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn handler(args: CliArgs) -> Result<(), Error> {
     let aur = aur::Handle::new();
 
     let packages = aur.search(args.package).await?;
