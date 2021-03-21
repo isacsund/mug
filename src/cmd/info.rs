@@ -26,9 +26,22 @@ pub struct CliArgs {
 pub async fn handler(args: CliArgs) -> Result<(), Error> {
     let aur = aur::Handle::new();
 
-    // TODO: check if all packages were found
-    // raur.info doesn't return any errors if the package isn't found
     let packages = aur.info(&args.packages).await?;
+
+    let missing: Vec<&String> = args
+        .packages
+        .iter()
+        .filter(|name| {
+            !packages
+                .iter()
+                .map(|package| &package.name)
+                .collect::<Vec<_>>()
+                .contains(name)
+        })
+        .collect();
+
+    printlist!("Package was not found:", &missing);
+    println!();
 
     for package in packages {
         println!("Repository: aur");
