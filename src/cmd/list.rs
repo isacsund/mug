@@ -5,12 +5,13 @@ use clap::Clap;
 
 // Own imports {{{
 use crate::alpm;
+use crate::error::Error;
 // }}}
 
 #[derive(Clap)]
 pub struct CliArgs {}
 
-pub async fn handler(_args: CliArgs) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn handler(_args: CliArgs) -> Result<(), Error> {
     let alpm = alpm::Handle::new()?;
 
     let db = alpm.client().localdb();

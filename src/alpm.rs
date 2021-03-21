@@ -1,5 +1,10 @@
 // 3rd party imports {{{
 use alpm::Alpm;
+
+// }}}
+
+// Own imports {{{
+use crate::error::Error;
 // }}}
 
 /// The default path to package database.
@@ -15,7 +20,7 @@ pub struct Handle {
 
 impl Handle {
     /// Create a new handle with default settings.
-    pub fn new() -> Result<Self, Box<dyn std::error::Error>> {
+    pub fn new() -> Result<Self, Error> {
         let alpm = Alpm::new(ROOT, DB_PATH)?;
 
         Ok(Self { client: alpm })
