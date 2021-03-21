@@ -3,13 +3,17 @@ use clap::Clap;
 
 // }}}
 
+// Own imports {{{
+use crate::alpm;
+// }}}
+
 #[derive(Clap)]
 pub struct CliArgs {}
 
 pub async fn handler(_args: CliArgs) -> Result<(), Box<dyn std::error::Error>> {
-    let alpm = alpm::Alpm::new("/", "/var/lib/pacman")?;
+    let alpm = alpm::Handle::new()?;
 
-    let db = alpm.localdb();
+    let db = alpm.client().localdb();
     let packages = db.pkgs().iter().collect::<Vec<_>>();
 
     // TODO: pretty print with a header e.g.

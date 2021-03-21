@@ -6,6 +6,7 @@ use clap::{
 };
 // }}}
 
+mod alpm;
 mod aur;
 mod cmd;
 mod error;
