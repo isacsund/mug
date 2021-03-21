@@ -1,5 +1,6 @@
 // 3rd party imports {{{
 use clap::Clap;
+
 // }}}
 
 // Own imports {{{
@@ -12,7 +13,7 @@ macro_rules! printlist {
     ($h:expr, $v:expr) => {{
         println!("{}", $h);
         for v in $v {
-            println!("{:indent$}{}", "", v, indent=2)
+            println!("{:indent$}{}", "", v, indent = 2)
         }
     }};
 }
@@ -33,9 +34,15 @@ pub async fn handler(args: CliArgs) -> Result<(), Error> {
         println!("Repository: aur");
         println!("Name: {}", &package.name);
         println!("Version: {}", &package.version);
-        println!("Description: {}", &package.description.unwrap_or("".to_string()));
+        println!(
+            "Description: {}",
+            &package.description.unwrap_or("".to_string())
+        );
         println!("URL: {}", &package.url.unwrap_or("".to_string()));
-        println!("Maintainer: {}", &package.maintainer.unwrap_or("".to_string()));
+        println!(
+            "Maintainer: {}",
+            &package.maintainer.unwrap_or("".to_string())
+        );
         printlist!("Groups:", &package.groups);
         printlist!("Licenses:", &package.license);
         printlist!("Provides:", &package.provides);
