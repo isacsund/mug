@@ -1,3 +1,8 @@
+// std imports {{{
+use std::process::Command;
+
+// }}}
+
 // 3rd party imports {{{
 use reqwest::{
     Client,
@@ -118,6 +123,31 @@ impl Handle {
             client: Client::new(),
             url,
         }
+    }
+
+    /// Download package build files from AUR
+    pub fn download<S, I>(&self, packages: I) -> Result<()>
+    where
+        S: AsRef<str> + Send + Sync,
+        I: IntoIterator<Item = S>,
+    {
+        for package in packages {
+            let url = self.url.join(package.as_ref()).expect("Failed to construct package URL");
+
+            let output = Command::new("git")
+                .args(&[
+                    "clone", url.as_str(),
+                ])
+                .output()
+                .expect("failed to execute process");
+
+            use std::io::Write;
+            std::io::stdout().write_all(&output.stdout).unwrap();
+            std::io::stderr().write_all(&output.stderr).unwrap();
+            println!("{}", output.status);
+        }
+
+        Ok(())
     }
 
     /// A helper function for making a request with given parameters.
