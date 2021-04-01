@@ -1,3 +1,8 @@
+mod alpm;
+mod aur;
+mod cmd;
+mod error;
+
 // 3rd party imports {{{
 use clap::{
     crate_authors,
@@ -5,11 +10,6 @@ use clap::{
     Clap,
 };
 // }}}
-
-mod alpm;
-mod aur;
-mod cmd;
-mod error;
 
 #[derive(Clap)]
 enum SubCommand {
