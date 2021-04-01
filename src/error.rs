@@ -9,6 +9,8 @@ pub enum Error {
     Alpm(alpm::Error),
     /// AUR error.
     Aur(String),
+    /// Configuration error.
+    Config(String),
     /// There was an error parsing an URL.
     Url(ParseError),
     /// Reqwest returned an error.
@@ -38,6 +40,7 @@ impl fmt::Display for Error {
         match self {
             Error::Alpm(ref s) => write!(fmt, "{}", s),
             Error::Aur(ref s) => write!(fmt, "{}", s),
+            Error::Config(ref s) => write!(fmt, "{}", s),
             Error::Url(ref e) => write!(fmt, "{}", e),
             Error::Reqwest(ref e) => write!(fmt, "{}", e),
         }
@@ -49,6 +52,7 @@ impl std::error::Error for Error {
         match self {
             Error::Alpm(ref e) => e.source(),
             Error::Aur(_) => None,
+            Error::Config(_) => None,
             Error::Url(ref e) => e.source(),
             Error::Reqwest(ref e) => e.source(),
         }

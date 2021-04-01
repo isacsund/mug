@@ -1,6 +1,7 @@
 mod alpm;
 mod aur;
 mod cmd;
+mod config;
 mod error;
 
 // 3rd party imports {{{
@@ -9,6 +10,10 @@ use clap::{
     crate_version,
     Clap,
 };
+// }}}
+
+// Own imports {{{
+use config::Config;
 // }}}
 
 #[derive(Clap)]
@@ -31,6 +36,14 @@ struct CliArgs {
 
 #[tokio::main]
 async fn main() {
+    let _config = match Config::load() {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("Configuration error: {}", e);
+            std::process::exit(1)
+        }
+    };
+
     let args = CliArgs::parse();
 
     let result = match args.subcmd {
