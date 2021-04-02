@@ -15,6 +15,9 @@ use url::Url;
 use crate::error::Error;
 // }}}
 
+/// Binary name
+const BINARY_NAME: &str = env!("CARGO_PKG_NAME");
+
 /// The default URL used for the AUR.
 const AUR_URL: &str = "https://aur.archlinux.org/";
 
@@ -42,7 +45,7 @@ impl Config {
             None => return Err(Error::Config("Failed to get config directory".to_string())),
         };
 
-        let config_dir = config_dir.join(env!("CARGO_PKG_NAME"));
+        let config_dir = config_dir.join(BINARY_NAME);
         let config_file = config_dir.join("config.toml");
 
         let config = match fs::read_to_string(&config_file) {
