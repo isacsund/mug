@@ -36,7 +36,7 @@ struct CliArgs {
 
 #[tokio::main]
 async fn main() {
-    let _config = match Config::load() {
+    let config = match Config::load() {
         Ok(c) => c,
         Err(e) => {
             eprintln!("Configuration error: {}", e);
@@ -47,10 +47,10 @@ async fn main() {
     let args = CliArgs::parse();
 
     let result = match args.subcmd {
-        SubCommand::Info(args) => cmd::info::handler(args).await,
-        SubCommand::Download(args) => cmd::download::handler(args).await,
+        SubCommand::Info(args) => cmd::info::handler(args, config).await,
+        SubCommand::Download(args) => cmd::download::handler(args, config).await,
         SubCommand::List(args) => cmd::list::handler(args).await,
-        SubCommand::Search(args) => cmd::search::handler(args).await,
+        SubCommand::Search(args) => cmd::search::handler(args, config).await,
     };
 
     match result {

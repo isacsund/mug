@@ -4,6 +4,7 @@ use clap::Clap;
 
 // Own imports {{{
 use crate::aur;
+use crate::config::Config;
 use crate::error::Error;
 // }}}
 
@@ -12,8 +13,8 @@ pub struct CliArgs {
     package: String,
 }
 
-pub async fn handler(args: CliArgs) -> Result<(), Error> {
-    let aur = aur::Handle::new();
+pub async fn handler(args: CliArgs, config: Config) -> Result<(), Error> {
+    let aur = aur::Handle::from(&config);
 
     let packages = aur.search(args.package).await?;
 

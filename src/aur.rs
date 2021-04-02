@@ -13,11 +13,9 @@ use serde_derive::Deserialize;
 // }}}
 
 // Own imports {{{
+use crate::config::Config;
 use crate::error::Error;
 // }}}
-
-/// The default URL used for the AUR.
-pub static AUR_URL: &str = "https://aur.archlinux.org/";
 
 // AUR package definition {{{
 /// The package info that a query will return.
@@ -107,21 +105,19 @@ type Result<T> = std::result::Result<T, Error>;
 
 /// A handle for making AUR requests.
 #[derive(Clone, Debug)]
-pub struct Handle {
+pub struct Handle<'a> {
     /// The reqwest client.
     client: Client,
     /// The AUR URL.
-    url: Url,
+    url: &'a Url,
 }
 
-impl Handle {
-    /// Create a new handle with default settings
-    pub fn new() -> Self {
-        let url = Url::parse(AUR_URL).expect("Failed to parse URL");
-
+impl<'a> Handle<'a> {
+    /// Create a new handle from a config file.
+    pub fn from(config: &'a Config) -> Self {
         Handle {
             client: Client::new(),
-            url,
+            url: &config.aur_url,
         }
     }
 
