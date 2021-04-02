@@ -1,6 +1,6 @@
 // std imports {{{
 use std::process::Command;
-
+use std::path::PathBuf;
 // }}}
 
 // 3rd party imports {{{
@@ -110,6 +110,9 @@ pub struct Handle<'a> {
     client: Client,
     /// The AUR URL.
     url: &'a Url,
+    /// Build directory for packages.
+    build_dir: &'a PathBuf,
+
 }
 
 impl<'a> Handle<'a> {
@@ -118,6 +121,7 @@ impl<'a> Handle<'a> {
         Handle {
             client: Client::new(),
             url: &config.aur_url,
+            build_dir: &config.build_dir,
         }
     }
 
@@ -131,6 +135,7 @@ impl<'a> Handle<'a> {
             let url = self.url.join(package.as_ref()).expect("Failed to construct package URL");
 
             let output = Command::new("git")
+                .current_dir(self.build_dir)
                 .args(&[
                     "clone", url.as_str(),
                 ])
