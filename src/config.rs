@@ -1,6 +1,7 @@
 // std imports {{{
 use std::fs;
 use std::io::ErrorKind::NotFound;
+use std::path::PathBuf;
 // }}}
 
 // 3rd party imports {{{
@@ -26,14 +27,19 @@ const AUR_URL: &str = "https://aur.archlinux.org/";
 #[derive(Deserialize, Serialize)]
 pub struct Config {
     pub aur_url: Url,
+    pub build_dir: PathBuf,
 }
 
 impl Default for Config {
     fn default() -> Self {
         let aur_url = Url::parse(AUR_URL).expect("Failed to parse URL");
 
+        let cache_dir = dirs::cache_dir().expect("Failed to get cache directory");
+        let build_dir = cache_dir.join(BINARY_NAME);
+
         Config {
             aur_url,
+            build_dir,
         }
     }
 }
@@ -68,6 +74,12 @@ impl Config {
                 return Err(Error::Config("Failed to load configuration file".to_string()))
             }
         };
+
+        // Create build directory if it doesn't exist
+        if !config.build_dir.is_dir() {
+            fs::create_dir_all(&config.build_dir).expect("Failed to create build directory");
+        }
+
 
         Ok(config)
     }
