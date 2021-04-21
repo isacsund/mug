@@ -25,7 +25,7 @@ pub async fn handler(_args: CliArgs) -> Result<(), Error> {
         println!(
             "{name} {version}",
             name = package.name(),
-            version = package.version()
+            version = package.version(),
         );
     }
 
