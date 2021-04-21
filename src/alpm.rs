@@ -36,4 +36,17 @@ impl Handle {
     pub fn client(&self) -> &Alpm {
         &self.client
     }
+
+    /// Check whether a package comes from an official repository.
+    pub fn is_official_package(&self, package: &alpm::Package) -> bool {
+        let dbs = self.client().syncdbs();
+
+        for db in dbs {
+            if let Ok(_) = db.pkg(package.name()) {
+                return true
+            }
+        }
+
+        false
+    }
 }
