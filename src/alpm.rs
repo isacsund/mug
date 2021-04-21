@@ -1,5 +1,6 @@
 // 3rd party imports {{{
 use alpm::Alpm;
+use alpm::SigLevel;
 
 // }}}
 
@@ -22,6 +23,11 @@ impl Handle {
     /// Create a new handle with default settings.
     pub fn new() -> Result<Self, Error> {
         let alpm = Alpm::new(ROOT, DB_PATH)?;
+
+        alpm.register_syncdb("community", SigLevel::NONE)?;
+        alpm.register_syncdb("core", SigLevel::NONE)?;
+        alpm.register_syncdb("extra", SigLevel::NONE)?;
+        alpm.register_syncdb("multilib", SigLevel::NONE)?;
 
         Ok(Self { client: alpm })
     }
