@@ -1,4 +1,5 @@
 // std imports {{{
+use std::borrow::Borrow;
 use std::process::Command;
 use std::path::PathBuf;
 // }}}
@@ -152,7 +153,12 @@ impl<'a> Handle<'a> {
     }
 
     /// A helper function for making a request with given parameters.
-    async fn request(&self, params: &[(&str, &str)]) -> Result<Vec<Package>> {
+    async fn request<S, I>(&self, params: I) -> Result<Vec<Package>>
+    where
+        S: AsRef<str> + Send + Sync,
+        I: IntoIterator,
+        I::Item: Borrow<(S, S)>,
+    {
         let url = self.url.join("rpc")?;
         let url = Url::parse_with_params(url.as_str(), params)?;
 
@@ -171,17 +177,25 @@ impl<'a> Handle<'a> {
     }
 
     /// Performs an AUR info request.
-    pub async fn info<S>(&self, packages: &[S]) -> Result<Vec<Package>>
+    pub async fn info<S, I: Iterator>(&self, packages: I) -> Result<Vec<Package>>
     where
         S: AsRef<str> + Send + Sync,
+        I: IntoIterator<Item = S>,
     {
+        // Create a vector so the string will be owned by the vector, and not the iterator.
+        // `Iterator<Item = &str> requires that the string data behind the slices is not
+        // owned by the iterator, but an `Iterator<Item = String> _does_ own the string
+        // data. Creating a vector satisfies the requirement that the `Iterator<Item =
+        // &str> does not own the string data.
+        let packages: Vec<S> = packages.into_iter().collect();
+
         let mut params = packages
             .iter()
             .map(|name| ("arg[]", name.as_ref()))
             .collect::<Vec<_>>();
         params.extend(&[("v", "5"), ("type", "info")]);
 
-        self.request(&params).await
+        self.request(params).await
     }
 
     /// Performs an AUR search request.

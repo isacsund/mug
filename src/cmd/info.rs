@@ -27,7 +27,7 @@ pub struct CliArgs {
 pub async fn handler(args: CliArgs, config: Config) -> Result<(), Error> {
     let aur = aur::Handle::from(&config);
 
-    let packages = aur.info(&args.packages).await?;
+    let packages = aur.info(args.packages.iter()).await?;
 
     let missing: Vec<&String> = args
         .packages
