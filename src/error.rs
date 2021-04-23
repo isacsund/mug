@@ -7,19 +7,31 @@ use url::ParseError;
 pub enum Error {
     /// Alpm returned an error.
     Alpm(alpm::Error),
-    /// AUR error.
-    Aur(String),
+    /// raur error.
+    Raur(raur::Error),
+    /// aur-fetch error
+    Fetch(aur_fetch::Error),
     /// Configuration error.
     Config(String),
     /// There was an error parsing an URL.
     Url(ParseError),
-    /// Reqwest returned an error.
-    Reqwest(reqwest::Error),
 }
 
 impl From<alpm::Error> for Error {
     fn from(e: alpm::Error) -> Error {
         Error::Alpm(e)
+    }
+}
+
+impl From<raur::Error> for Error {
+    fn from(e: raur::Error) -> Error {
+        Error::Raur(e)
+    }
+}
+
+impl From<aur_fetch::Error> for Error {
+    fn from(e: aur_fetch::Error) -> Error {
+        Error::Fetch(e)
     }
 }
 
@@ -29,20 +41,14 @@ impl From<ParseError> for Error {
     }
 }
 
-impl From<reqwest::Error> for Error {
-    fn from(e: reqwest::Error) -> Error {
-        Error::Reqwest(e)
-    }
-}
-
 impl fmt::Display for Error {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         match self {
             Error::Alpm(ref s) => write!(fmt, "{}", s),
-            Error::Aur(ref s) => write!(fmt, "{}", s),
+            Error::Raur(ref s) => write!(fmt, "{}", s),
+            Error::Fetch(ref s) => write!(fmt, "{}", s),
             Error::Config(ref s) => write!(fmt, "{}", s),
             Error::Url(ref e) => write!(fmt, "{}", e),
-            Error::Reqwest(ref e) => write!(fmt, "{}", e),
         }
     }
 }
@@ -51,10 +57,10 @@ impl std::error::Error for Error {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Error::Alpm(ref e) => e.source(),
-            Error::Aur(_) => None,
+            Error::Raur(ref e) => e.source(),
+            Error::Fetch(ref e) => e.source(),
             Error::Config(_) => None,
             Error::Url(ref e) => e.source(),
-            Error::Reqwest(ref e) => e.source(),
         }
     }
 }

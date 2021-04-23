@@ -1,5 +1,6 @@
 // 3rd party imports {{{
 use clap::Clap;
+use raur::Raur;
 
 // }}}
 
@@ -25,9 +26,8 @@ pub struct CliArgs {
 }
 
 pub async fn handler(args: CliArgs, config: Config) -> Result<(), Error> {
-    let aur = aur::Handle::from(&config);
-
-    let packages = aur.info(args.packages.iter()).await?;
+    let aur = aur::Handle::new(&config)?;
+    let packages = aur.rpc.info(&args.packages).await?;
 
     let missing: Vec<&String> = args
         .packages

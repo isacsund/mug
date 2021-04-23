@@ -1,6 +1,8 @@
 // 3rd party imports {{{
-use alpm::Alpm;
-use alpm::SigLevel;
+use alpm::{
+    Alpm,
+    SigLevel,
+};
 
 // }}}
 
@@ -43,7 +45,7 @@ impl Handle {
 
         for db in dbs {
             if let Ok(_) = db.pkg(package.name()) {
-                return true
+                return true;
             }
         }
 

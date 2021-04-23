@@ -1,5 +1,7 @@
 // 3rd party imports {{{
 use clap::Clap;
+use raur::Raur;
+
 // }}}
 
 // Own imports {{{
@@ -14,19 +16,16 @@ pub struct CliArgs {
 }
 
 pub async fn handler(args: CliArgs, config: Config) -> Result<(), Error> {
-    let aur = aur::Handle::from(&config);
+    let aur = aur::Handle::new(&config)?;
 
-    let packages = aur.search(args.package).await?;
+    let packages = aur.rpc.search(&args.package).await?;
 
     for package in packages {
         let stats = format!("+{} ~{:.2}", package.num_votes, package.popularity);
 
         print!(
             "{}/{} {} [{}]",
-            "aur",
-            &package.name,
-            &package.version,
-            stats,
+            "aur", &package.name, &package.version, stats,
         );
 
         print!("\n");
