@@ -35,7 +35,7 @@ pub async fn handler(args: CliArgs, config: Config) -> Result<(), Error> {
         .filter(|&name| {
             !packages
                 .iter()
-                .map(|package| &package.name)
+                .map(|p| &p.name)
                 .any(|p| p == name)
         })
         .collect();
