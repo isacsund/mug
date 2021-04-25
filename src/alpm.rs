@@ -42,7 +42,7 @@ impl Handle {
         let dbs = self.client().syncdbs();
 
         for db in dbs {
-            if let Ok(_) = db.pkg(package.name()) {
+            if db.pkg(package.name()).is_ok() {
                 return true
             }
         }
