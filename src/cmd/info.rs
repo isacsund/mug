@@ -32,12 +32,11 @@ pub async fn handler(args: CliArgs, config: Config) -> Result<(), Error> {
     let missing: Vec<&String> = args
         .packages
         .iter()
-        .filter(|name| {
+        .filter(|&name| {
             !packages
                 .iter()
                 .map(|package| &package.name)
-                .collect::<Vec<_>>()
-                .contains(name)
+                .any(|p| p == name)
         })
         .collect();
 
@@ -50,12 +49,12 @@ pub async fn handler(args: CliArgs, config: Config) -> Result<(), Error> {
         println!("Version: {}", &package.version);
         println!(
             "Description: {}",
-            &package.description.unwrap_or("".to_string())
+            &package.description.unwrap_or_else(|| "".to_string())
         );
-        println!("URL: {}", &package.url.unwrap_or("".to_string()));
+        println!("URL: {}", &package.url.unwrap_or_else(|| "".to_string()));
         println!(
             "Maintainer: {}",
-            &package.maintainer.unwrap_or("".to_string())
+            &package.maintainer.unwrap_or_else(|| "".to_string())
         );
         printlist!("Groups:", &package.groups);
         printlist!("Licenses:", &package.license);
