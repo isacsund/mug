@@ -22,14 +22,13 @@ pub async fn handler(args: CliArgs, config: Config) -> Result<(), Error> {
         let stats = format!("+{} ~{:.2}", package.num_votes, package.popularity);
 
         print!(
-            "{}/{} {} [{}]",
-            "aur",
+            "aur/{} {} [{}]",
             &package.name,
             &package.version,
             stats,
         );
 
-        print!("\n");
+        println!();
     }
 
     Ok(())
