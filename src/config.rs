@@ -22,6 +22,26 @@ const BINARY_NAME: &str = env!("CARGO_PKG_NAME");
 /// The default URL used for the AUR.
 const AUR_URL: &str = "https://aur.archlinux.org/";
 
+/// Pacman repository.
+#[derive(Debug)]
+pub struct Repository {
+    /// Name
+    pub name: String,
+    /// Servers
+    pub servers: Vec<String>,
+}
+
+impl Repository {
+    fn new(repository: &str) -> Self {
+        Self {
+            name: repository.to_string(),
+            servers: vec![
+                format!("https://archlinux.mailtunnel.eu/{}/os/x86_64", repository),
+            ],
+        }
+    }
+}
+
 /// Configuration for mug.
 #[derive(Debug)]
 #[derive(Deserialize, Serialize)]
@@ -29,6 +49,9 @@ const AUR_URL: &str = "https://aur.archlinux.org/";
 pub struct Config {
     pub aur_url: Url,
     pub build_dir: PathBuf,
+
+    #[serde(skip)]
+    pub repos: Vec<Repository>,
 }
 
 impl Default for Config {
@@ -41,6 +64,12 @@ impl Default for Config {
         Config {
             aur_url,
             build_dir,
+            repos: vec![
+                Repository::new("community"),
+                Repository::new("core"),
+                Repository::new("extra"),
+                Repository::new("multilib"),
+            ],
         }
     }
 }
