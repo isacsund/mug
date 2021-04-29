@@ -25,6 +25,7 @@ const AUR_URL: &str = "https://aur.archlinux.org/";
 /// Configuration for mug.
 #[derive(Debug)]
 #[derive(Deserialize, Serialize)]
+#[serde(default)]
 pub struct Config {
     pub aur_url: Url,
     pub build_dir: PathBuf,
