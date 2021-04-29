@@ -16,7 +16,7 @@ use url::Url;
 use crate::error::Error;
 // }}}
 
-/// Binary name
+/// Binary name.
 const BINARY_NAME: &str = env!("CARGO_PKG_NAME");
 
 /// The default URL used for the AUR.
@@ -46,7 +46,7 @@ impl Default for Config {
 
 impl Config {
     pub fn load() -> Result<Self, Error> {
-        let config_dir = match dirs::config_dir(){
+        let config_dir = match dirs::config_dir() {
             Some(d) => d,
             None => return Err(Error::Config("Failed to get config directory".to_string())),
         };
@@ -75,11 +75,10 @@ impl Config {
             }
         };
 
-        // Create build directory if it doesn't exist
+        // Create build directory if it doesn't exist.
         if !config.build_dir.is_dir() {
             fs::create_dir_all(&config.build_dir).expect("Failed to create build directory");
         }
-
 
         Ok(config)
     }
