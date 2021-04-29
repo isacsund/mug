@@ -49,7 +49,7 @@ async fn main() {
     let result = match args.subcmd {
         SubCommand::Info(args) => cmd::info::handler(args, config).await,
         SubCommand::Download(args) => cmd::download::handler(args, config).await,
-        SubCommand::List(args) => cmd::list::handler(args).await,
+        SubCommand::List(args) => cmd::list::handler(args, config).await,
         SubCommand::Search(args) => cmd::search::handler(args, config).await,
     };
 

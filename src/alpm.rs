@@ -5,6 +5,7 @@ use alpm::SigLevel;
 // }}}
 
 // Own imports {{{
+use crate::config::Config;
 use crate::error::Error;
 // }}}
 
@@ -20,14 +21,14 @@ pub struct Handle {
 }
 
 impl Handle {
-    /// Create a new handle with default settings.
-    pub fn new() -> Result<Self, Error> {
-        let alpm = Alpm::new(ROOT, DB_PATH)?;
+    /// Create a new handle from the the given `Config`.
+    pub fn from(config: &Config) -> Result<Self, Error> {
+        let mut alpm = Alpm::new(ROOT, DB_PATH)?;
 
-        alpm.register_syncdb("community", SigLevel::NONE)?;
-        alpm.register_syncdb("core", SigLevel::NONE)?;
-        alpm.register_syncdb("extra", SigLevel::NONE)?;
-        alpm.register_syncdb("multilib", SigLevel::NONE)?;
+        for repo in &config.repos {
+            let db = alpm.register_syncdb_mut(repo.name.clone(), SigLevel::NONE)?;
+            db.set_servers(repo.servers.iter())?;
+        }
 
         Ok(Self { client: alpm })
     }

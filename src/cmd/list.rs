@@ -5,6 +5,7 @@ use clap::Clap;
 
 // Own imports {{{
 use crate::alpm;
+use crate::config::Config;
 use crate::error::Error;
 // }}}
 
@@ -15,8 +16,8 @@ pub struct CliArgs {
     unofficial: bool,
 }
 
-pub async fn handler(args: CliArgs) -> Result<(), Error> {
-    let alpm = alpm::Handle::new()?;
+pub async fn handler(args: CliArgs, config: Config) -> Result<(), Error> {
+    let alpm = alpm::Handle::from(&config)?;
 
     let db = alpm.client().localdb();
     let mut packages = db.pkgs().iter().collect::<Vec<_>>();
